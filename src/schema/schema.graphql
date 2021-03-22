@@ -1,0 +1,27 @@
+type Query {
+  helloThere: String!
+  streamKeys: [StreamKey]
+}
+
+type Mutation {
+
+  addStreamKey(
+    streamKey: String!
+    pwd: String
+    alias: String
+    start: String
+    end: String
+  ): StreamKey
+
+  genTempStreamKey(alias: String, start: String!, end: String!): StreamKey
+
+  deleteStreamKey(streamKey: String!): Boolean
+}
+
+type StreamKey {
+  streamKey: String!
+  pwd: String
+  alias: String
+  start: String
+  end: String
+}

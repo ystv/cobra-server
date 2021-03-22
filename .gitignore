@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.local
+cobraLocal.sqlite
+*.log
+certs/
+.idea/

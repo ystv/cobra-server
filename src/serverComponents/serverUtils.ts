@@ -1,8 +1,12 @@
-import { makeExecutableSchema } from "apollo-server-express";
+import {
+  ApolloServerExpressConfig,
+  makeExecutableSchema,
+} from "apollo-server-express";
 import { GraphQLSchema } from "graphql";
 import resolvers from "../resolverMap";
 import * as typeDefs from "../schema/schema.graphql";
 import { Request, Response } from "express";
+import { checkJWTCookie } from "./authGQL";
 
 export const schema: GraphQLSchema = makeExecutableSchema({
   typeDefs,
@@ -17,7 +21,17 @@ export const nginxJoinCheck = (req: Request, res: Response) => {
   res.end();
 };
 
-export const healthzCheck = (req: Request, res: Response) => {
+export const healthZCheck = (req: Request, res: Response) => {
   res.status(200);
   res.end();
+};
+
+export const apolloServerConfig: ApolloServerExpressConfig = {
+  schema,
+  playground: {
+    settings: {
+      "request.credentials": "include",
+    },
+  },
+  context: (req) => checkJWTCookie(req),
 };
