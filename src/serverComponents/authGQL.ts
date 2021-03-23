@@ -1,11 +1,12 @@
 import { ExpressContext } from "apollo-server-express";
 import jwt from "jsonwebtoken";
 
-export const checkJWTCookie = (req: ExpressContext): boolean => {
-  console.log(jwt.decode(req.req.cookies.token));
+export const checkJWTCookie = (req: ExpressContext) => {
+  //let user = jwt.decode(req.req.cookies.token);
+  //console.log(jwt.decode(req.req.cookies.token));
 
   // Return the authenticated user into the context
-  return false;
+  return null;
 };
 
 // function checkAuthCookie(token: any) {

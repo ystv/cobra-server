@@ -22,7 +22,9 @@ export type Query = {
 export type Mutation = {
   __typename?: 'Mutation';
   addStreamKey?: Maybe<StreamKey>;
-  genStreamKey?: Maybe<StreamKey>;
+  addGenPwdStreamKey?: Maybe<StreamKey>;
+  editStreamKey?: Maybe<StreamKey>;
+  genTempStreamKey?: Maybe<StreamKey>;
   deleteStreamKey?: Maybe<Scalars['Boolean']>;
 };
 
@@ -36,7 +38,24 @@ export type MutationAddStreamKeyArgs = {
 };
 
 
-export type MutationGenStreamKeyArgs = {
+export type MutationAddGenPwdStreamKeyArgs = {
+  streamKey: Scalars['String'];
+  alias?: Maybe<Scalars['String']>;
+  start?: Maybe<Scalars['String']>;
+  end?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationEditStreamKeyArgs = {
+  streamKey: Scalars['String'];
+  pwd?: Maybe<Scalars['String']>;
+  alias?: Maybe<Scalars['String']>;
+  start?: Maybe<Scalars['String']>;
+  end?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationGenTempStreamKeyArgs = {
   alias?: Maybe<Scalars['String']>;
   start: Scalars['String'];
   end: Scalars['String'];
@@ -48,7 +67,7 @@ export type MutationDeleteStreamKeyArgs = {
 };
 
 export type StreamKey = {
-  __typename?: 'streamKey';
+  __typename?: 'StreamKey';
   streamKey: Scalars['String'];
   pwd?: Maybe<Scalars['String']>;
   alias?: Maybe<Scalars['String']>;
@@ -138,7 +157,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   Mutation: ResolverTypeWrapper<{}>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  streamKey: ResolverTypeWrapper<StreamKey>;
+  StreamKey: ResolverTypeWrapper<StreamKey>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -147,21 +166,23 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   Mutation: {};
   Boolean: Scalars['Boolean'];
-  streamKey: StreamKey;
+  StreamKey: StreamKey;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   helloThere?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  streamKeys?: Resolver<Maybe<Array<Maybe<ResolversTypes['streamKey']>>>, ParentType, ContextType>;
+  streamKeys?: Resolver<Maybe<Array<Maybe<ResolversTypes['StreamKey']>>>, ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  addStreamKey?: Resolver<Maybe<ResolversTypes['streamKey']>, ParentType, ContextType, RequireFields<MutationAddStreamKeyArgs, 'streamKey'>>;
-  genStreamKey?: Resolver<Maybe<ResolversTypes['streamKey']>, ParentType, ContextType, RequireFields<MutationGenStreamKeyArgs, 'start' | 'end'>>;
+  addStreamKey?: Resolver<Maybe<ResolversTypes['StreamKey']>, ParentType, ContextType, RequireFields<MutationAddStreamKeyArgs, 'streamKey'>>;
+  addGenPwdStreamKey?: Resolver<Maybe<ResolversTypes['StreamKey']>, ParentType, ContextType, RequireFields<MutationAddGenPwdStreamKeyArgs, 'streamKey'>>;
+  editStreamKey?: Resolver<Maybe<ResolversTypes['StreamKey']>, ParentType, ContextType, RequireFields<MutationEditStreamKeyArgs, 'streamKey'>>;
+  genTempStreamKey?: Resolver<Maybe<ResolversTypes['StreamKey']>, ParentType, ContextType, RequireFields<MutationGenTempStreamKeyArgs, 'start' | 'end'>>;
   deleteStreamKey?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteStreamKeyArgs, 'streamKey'>>;
 };
 
-export type StreamKeyResolvers<ContextType = any, ParentType extends ResolversParentTypes['streamKey'] = ResolversParentTypes['streamKey']> = {
+export type StreamKeyResolvers<ContextType = any, ParentType extends ResolversParentTypes['StreamKey'] = ResolversParentTypes['StreamKey']> = {
   streamKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   pwd?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   alias?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -173,7 +194,7 @@ export type StreamKeyResolvers<ContextType = any, ParentType extends ResolversPa
 export type Resolvers<ContextType = any> = {
   Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
-  streamKey?: StreamKeyResolvers<ContextType>;
+  StreamKey?: StreamKeyResolvers<ContextType>;
 };
 
 

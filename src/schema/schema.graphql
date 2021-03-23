@@ -13,6 +13,21 @@ type Mutation {
     end: String
   ): StreamKey
 
+  addGenPwdStreamKey(
+    streamKey: String!
+    alias: String
+    start: String
+    end: String
+  ): StreamKey
+
+  editStreamKey(
+    streamKey: String!
+    pwd: String
+    alias: String
+    start: String
+    end: String
+  ): StreamKey
+
   genTempStreamKey(alias: String, start: String!, end: String!): StreamKey
 
   deleteStreamKey(streamKey: String!): Boolean
