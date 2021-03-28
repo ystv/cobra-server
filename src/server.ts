@@ -20,6 +20,9 @@
 // setInterval(pollStreamServers, 1000);
 //
 
+import dotEnvFlow from "dotenv-flow";
+
+dotEnvFlow.config();
 import express from "express";
 import fs from "fs";
 import http from "http";
@@ -33,10 +36,8 @@ import {
   apolloServerConfig,
   healthZCheck,
   nginxJoinCheck,
-  schema,
 } from "./serverComponents/serverUtils";
 import { authStream } from "./serverComponents/authStream";
-import { checkJWTCookie } from "./serverComponents/authGQL";
 
 // Create express and Apollo handlers
 const app = express();

@@ -1,21 +1,36 @@
-import { ExpressContext } from "apollo-server-express";
+import { AuthenticationError, ExpressContext } from "apollo-server-express";
 import jwt from "jsonwebtoken";
 
-export const checkJWTCookie = (req: ExpressContext) => {
-  //let user = jwt.decode(req.req.cookies.token);
-  //console.log(jwt.decode(req.req.cookies.token));
+export const checkJWTCookie = (req: ExpressContext): jwtInterface => {
+  let user: jwtInterface;
+  const secret: string = process.env.JWT_SECRET || "";
+
+  // Check for cookie's existence
+  if (req.req.cookies.token == undefined)
+    throw new AuthenticationError("No token cookie provided");
+
+  // Decode/verify token cookie
+  try {
+    user = jwt.verify(req.req.cookies.token, secret) as jwtInterface;
+  } catch {
+    throw new AuthenticationError("Invalid token");
+  }
+
+  // For now only accept SuperUsers to the API
+  if (user.perms.find((o) => o.name === "SuperUser") == undefined)
+    throw new AuthenticationError("Incorrect Permissions");
 
   // Return the authenticated user into the context
-  return null;
+  return user;
 };
 
-// function checkAuthCookie(token: any) {
-//   try {
-//     var decoded: any = jwt.verify(token, secret);
-//     if (decoded.perms.find((o: any) => o.name === "SuperUser") == undefined)
-//       throw new AuthenticationError("Incorrect Permissions");
-//     return { user: decoded };
-//   } catch (error) {
-//     throw new AuthenticationError("Couldn't authenticate socket cookie");
-//   }
-// }
+interface jwtInterface {
+  id: number;
+  perms: jwtPermsInterface[];
+  exp: string;
+}
+
+interface jwtPermsInterface {
+  id: number;
+  name: string;
+}

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-export const authStream = (req: Request, res: Response): boolean => {
+export const authStream = (req: Request, res: Response): void => {
   if (req.body.call == "publish") {
     try {
       //console.log("recieved key: ", req.body.name);
@@ -21,7 +21,6 @@ export const authStream = (req: Request, res: Response): boolean => {
   } else {
     res.sendStatus(200); // Allow playback without auth
   }
-  return false;
 };
 
 // async function checkUserProfile(data: {

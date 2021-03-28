@@ -5,3 +5,4 @@ cobraLocal.sqlite
 *.log
 certs/
 .idea/
+yarn-error.log

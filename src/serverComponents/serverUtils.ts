@@ -13,7 +13,7 @@ export const schema: GraphQLSchema = makeExecutableSchema({
   resolvers: resolvers as any, // eslint-disable-line
 });
 
-export const nginxJoinCheck = (req: Request, res: Response) => {
+export const nginxJoinCheck = (req: Request, res: Response): void => {
   res.status(200);
   res.send(
     "Hello! If you can see this, then NGINX has done an oopsie, please pray to whatever God or AI you favour and let's hope nothing else has toasted itself."
@@ -21,7 +21,7 @@ export const nginxJoinCheck = (req: Request, res: Response) => {
   res.end();
 };
 
-export const healthZCheck = (req: Request, res: Response) => {
+export const healthZCheck = (req: Request, res: Response): void => {
   res.status(200);
   res.end();
 };

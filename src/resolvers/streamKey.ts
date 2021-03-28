@@ -16,16 +16,16 @@ export const getStreamKeys = async (): Promise<StreamKey[]> =>
 
 export const validateStreamKeyDates = (
   args: MutationAddStreamKeyArgs | MutationEditStreamKeyArgs
-) => {
+): void => {
   if (args.start) {
-    let startDate = dayjs(args.start);
+    const startDate = dayjs(args.start);
     if (!startDate.isValid()) {
       throw new UserInputError("Invalid start value");
     }
     args.start = startDate.toISOString();
   }
   if (args.end) {
-    let endDate = dayjs(args.end);
+    const endDate = dayjs(args.end);
     if (!endDate.isValid()) {
       throw new UserInputError("Invalid end value");
     }
@@ -33,7 +33,9 @@ export const validateStreamKeyDates = (
   }
 };
 
-export const addStreamKey = async (args: MutationAddStreamKeyArgs) => {
+export const addStreamKey = async (
+  args: MutationAddStreamKeyArgs
+): Promise<StreamKey> => {
   validateStreamKeyDates(args);
   await prisma.streamKeys.create({ data: args }).catch(() => {
     throw new UserInputError("StreamKey already exists");
@@ -41,7 +43,9 @@ export const addStreamKey = async (args: MutationAddStreamKeyArgs) => {
   return args;
 };
 
-export const editStreamKey = async (args: MutationEditStreamKeyArgs) => {
+export const editStreamKey = async (
+  args: MutationEditStreamKeyArgs
+): Promise<StreamKey> => {
   validateStreamKeyDates(args);
   await prisma.streamKeys
     .update({
@@ -56,7 +60,9 @@ export const editStreamKey = async (args: MutationEditStreamKeyArgs) => {
   return args;
 };
 
-export const deleteStreamKey = (args: MutationDeleteStreamKeyArgs) => {
+export const deleteStreamKey = (
+  args: MutationDeleteStreamKeyArgs
+): Promise<boolean> => {
   return prisma.streamKeys
     .delete({
       where: {
@@ -69,10 +75,12 @@ export const deleteStreamKey = (args: MutationDeleteStreamKeyArgs) => {
     });
 };
 
-export const genStreamKey = async (args: MutationGenTempStreamKeyArgs) => {
+export const genStreamKey = async (
+  args: MutationGenTempStreamKeyArgs
+): Promise<StreamKey> => {
   let foundUnique = false;
   let genStreamKey = "";
-  while (foundUnique == false) {
+  while (!foundUnique) {
     genStreamKey = cryptoRandomString({
       length: 24,
       type: "alphanumeric",
@@ -93,8 +101,8 @@ export const genStreamKey = async (args: MutationGenTempStreamKeyArgs) => {
 
 export const addGenPwdStreamKey = async (
   args: MutationAddGenPwdStreamKeyArgs
-) => {
-  let genPwd = cryptoRandomString({
+): Promise<StreamKey> => {
+  const genPwd = cryptoRandomString({
     length: 10,
     type: "alphanumeric",
   });

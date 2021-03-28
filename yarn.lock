@@ -1390,6 +1390,11 @@
   dependencies:
     "@types/express" "*"
 
+"@types/dotenv-flow@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@types/dotenv-flow/-/dotenv-flow-3.1.0.tgz#e9ba53f95f3d40bbc0df99b206f649b2acfca0c6"
+  integrity sha512-qaWT42KDePdAGZFryYoV7EZnuuYZAO4KPVDWUV9OBOyJx7xCgKKERtVB7jBCM2mtKVI+OMMDK2ef11PWcHJz3g==
+
 "@types/express-serve-static-core@4.17.18":
   version "4.17.18"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.18.tgz#8371e260f40e0e1ca0c116a9afcd9426fa094c40"
