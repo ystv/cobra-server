@@ -98,9 +98,17 @@ import {
 const resolvers: Resolvers = {
   Query: {
     helloThere: () => "General Kenobi!",
+
+    // streamKeys
     streamKeys: () => getStreamKeys(),
+
+    // streams
+    //streams: () => getStreams()
+    //streamsRTMP: () => getStreamsRTMP()
+    //streamsSRT: () => getStreamsSRT()
   },
   Mutation: {
+    // streamKeys
     addStreamKey: (_parent, args) => addStreamKey(args),
     deleteStreamKey: (_parent, args) => deleteStreamKey(args),
     editStreamKey: (_parent, args) => editStreamKey(args),

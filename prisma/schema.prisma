@@ -8,7 +8,7 @@ datasource db {
 }
 
 model streamKeys {
-  streamKey String    @id
+  streamKey String  @id
   pwd       String?
   alias     String?
   start     String?

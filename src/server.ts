@@ -44,7 +44,7 @@ const app = express();
 const server = new ApolloServer(apolloServerConfig);
 
 // Adding middleware and safety
-app.use("*", cors());
+app.use(cors());
 app.use(compression());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));

@@ -24,10 +24,9 @@ export const checkJWTCookie = (req: ExpressContext): jwtInterface => {
   return user;
 };
 
-interface jwtInterface {
+interface jwtInterface extends jwt.JwtPayload {
   id: number;
   perms: jwtPermsInterface[];
-  exp: string;
 }
 
 interface jwtPermsInterface {
