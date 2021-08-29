@@ -36,6 +36,7 @@ import {
   apolloServerConfig,
   healthZCheck,
   nginxJoinCheck,
+  pollStreamServers,
 } from "./serverComponents/serverUtils";
 import { authStream } from "./serverComponents/authStream";
 
@@ -77,3 +78,5 @@ httpServer.listen(80, () => {
 httpsServer.listen(443, () => {
   console.log("HTTPS Server running on port 443");
 });
+
+setInterval(pollStreamServers, 1000);

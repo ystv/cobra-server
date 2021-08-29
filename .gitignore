@@ -6,3 +6,4 @@ cobraLocal.sqlite
 certs/
 .idea/
 yarn-error.log
+.DS_Store

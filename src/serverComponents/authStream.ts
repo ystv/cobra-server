@@ -21,6 +21,7 @@ export const authStream = (req: Request, res: Response): void => {
     const pwdString = String(req.body.pwd);
     req.body.pwd = pwdString.substr(0, pwdString.indexOf("\0"));
   }
+
   // Allow playback without auth - only check publishing
   // Allows for future secure playback function using potentially scoped and unique keys
   switch (req.body.call) {
