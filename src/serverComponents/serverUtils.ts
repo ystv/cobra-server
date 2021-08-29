@@ -8,7 +8,7 @@ import resolvers from "../resolverMap";
 import * as typeDefs from "../schema/schema.graphql";
 import { Request, Response } from "express";
 import { checkJWTCookie } from "./authGQL";
-import { RTMPStreamUpdate, SRTStreamUpdate } from "./streamsUpdater";
+import { getStreamApplications } from "../resolvers/streams";
 
 export const schema: GraphQLSchema = makeExecutableSchema({
   typeDefs,
@@ -41,12 +41,7 @@ export const apolloServerConfig: ApolloServerExpressConfig = {
 export const pubsub = new PubSub();
 
 export async function pollStreamServers() {
-  const newRTMPData = await RTMPStreamUpdate();
-  const newSRTData = await SRTStreamUpdate();
-  const newStreamsData = {
-    rtmp: newRTMPData.applications,
-    srt: newSRTData,
-  };
-  console.log(newStreamsData);
+  const newData = await getStreamApplications();
+  // console.log(newData);
   // pubsub.publish("STREAMS_CHANGED", { streamsChanged: newData });
 }

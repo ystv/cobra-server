@@ -1,6 +1,8 @@
+# noinspection GraphQLTypeRedefinition
 type Query {
   helloThere: String!
   streamKeys: [StreamKey]
+  streamApps: StreamApplications!
 }
 
 type Mutation {
@@ -39,4 +41,68 @@ type StreamKey {
   alias: String
   start: String
   end: String
+}
+
+type StreamApplications {
+  srt: [SRTStream]!
+  rtmp: [RTMPApplications]!
+}
+
+type RTMPApplications {
+  name: String
+  streams: [RTMPStreams]
+}
+
+type RTMPStreams {
+  name: String
+  time: Int
+  bwIn: Int
+  bytesIn: Int
+  bwOut: Int
+  bytesOut: Int
+  bwAudio: Int
+  bwVideo: Int
+  clients: [RTMPClients]
+  meta: RTMPMeta
+}
+
+type RTMPMeta{
+  video: RTMPVideo
+  audio: RTMPAudio
+}
+
+type RTMPVideo {
+  width: Int
+  height: Int
+  framerate: Float
+  codec: String
+  profile: String
+  compat: String
+  level: Float
+}
+
+type RTMPAudio {
+  codec: String
+  profile: String
+  channels: Int
+  sampleRate: Float
+}
+
+type RTMPClients {
+  id: Int
+  address: String
+  time: Int
+  flashVersion: String
+  dropped: Int
+  avSync: Int
+  timestamp: Int
+  publishing: Boolean
+  active: Boolean
+}
+
+type SRTStream {
+  name: String
+  url: String
+  clients: Int
+  created: String
 }

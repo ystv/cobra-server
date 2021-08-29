@@ -1,5 +1,3 @@
-// import express from "express";
-// var cookieParser = require("cookie-parser");
 // var cookieString = require("cookie");
 //
 //
@@ -16,9 +14,6 @@
 //     },
 //   },
 // });
-//
-// setInterval(pollStreamServers, 1000);
-//
 
 import dotEnvFlow from "dotenv-flow";
 

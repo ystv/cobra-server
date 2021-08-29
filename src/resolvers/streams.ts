@@ -1,44 +1,20 @@
 import axios from "axios";
 import { transform } from "camaro";
+import {
+  RtmpApplications,
+  SrtStream,
+  StreamApplications,
+} from "../generated/graphql";
 
-// export function RTMPStreamUpdate() {
-//   return axios
-//     .get()
-//     .then((e) => {
-//       var result = parser.parse(e.data, {
-//         attributeNamePrefix: "@_",
-//         attrNodeName: "attr", //default is 'false'
-//         textNodeName: "#text",
-//         ignoreAttributes: true,
-//         ignoreNameSpace: false,
-//         allowBooleanAttributes: false,
-//         parseNodeValue: true,
-//         parseAttributeValue: false,
-//         trimValues: true,
-//         cdataTagName: "__cdata", //default is 'false'
-//         cdataPositionChar: "\\c",
-//         parseTrueNumberOnly: false,
-//         arrayMode: false,
-//       });
-//       result = { rtmp: result.rtmp };
-//
-//       var newStream = result.rtmp.server.application.map((e: any) => {
-//         if (Array.isArray(e.live.stream)) {
-//           return e;
-//         } else {
-//           var newObj: any = e;
-//           newObj.live.stream = [e.live.stream];
-//           return newObj;
-//         }
-//       });
-//       var newSpec = result;
-//       newSpec.rtmp.server.application = newStream;
-//       return newSpec;
-//     })
-//     .catch(function (error) {
-//       console.log(error);
-//     });
-// }
+export const getStreamApplications = async () => {
+  const newRTMPData = await RTMPStreamUpdate();
+  const newSRTData = await SRTStreamUpdate();
+  const newStreamsData: StreamApplications = {
+    rtmp: newRTMPData ? newRTMPData.applications : [],
+    srt: newSRTData ?? [],
+  };
+  return newStreamsData;
+};
 
 export const RTMPStreamUpdate = () =>
   process.env.RTMP_STAT
@@ -53,7 +29,11 @@ export const RTMPStreamUpdate = () =>
           );
           return json;
         })
-    : ({} as RTMPResponse);
+        .catch((e) => {
+          console.error(e);
+          return null;
+        })
+    : null;
 
 const RTMPTransformObject = {
   nginxVersion: "rtmp/nginx_version",
@@ -129,53 +109,48 @@ interface RTMPResponse {
   bytesIn: number;
   bwOut: number;
   bytesOut: number;
-  applications: [
-    {
-      name: string;
-      streams: [
-        {
-          name: string;
-          time: number;
-          bwIn: number;
-          bytesIn: number;
-          bwOut: number;
-          bytesOut: number;
-          bwAudio: number;
-          bwVideo: number;
-          clients: [
-            {
-              id: number;
-              address: string;
-              time: number;
-              flashVersion: string;
-              dropped: number;
-              avSync: number;
-              timestamp: number;
-              publishing: boolean;
-              active: boolean;
-            }
-          ];
-          meta: {
-            video: {
-              width: number;
-              height: number;
-              framerate: number;
-              codec: string;
-              profile: string;
-              compat: string;
-              level: number;
-            };
-            audio: {
-              codec: string;
-              profile: string;
-              channels: number;
-              sampleRate: number;
-            };
-          };
-        }
-      ];
-    }
-  ];
+  applications: RtmpApplications[];
+  // applications: {
+  //   name: string;
+  //   streams: {
+  //     name: string;
+  //     time: number;
+  //     bwIn: number;
+  //     bytesIn: number;
+  //     bwOut: number;
+  //     bytesOut: number;
+  //     bwAudio: number;
+  //     bwVideo: number;
+  //     clients: {
+  //       id: number;
+  //       address: string;
+  //       time: number;
+  //       flashVersion: string;
+  //       dropped: number;
+  //       avSync: number;
+  //       timestamp: number;
+  //       publishing: boolean;
+  //       active: boolean;
+  //     }[];
+  //     meta: {
+  //       video: {
+  //         width: number;
+  //         height: number;
+  //         framerate: number;
+  //         codec: string;
+  //         profile: string;
+  //         compat: string;
+  //         level: number;
+  //       };
+  //       audio: {
+  //         codec: string;
+  //         profile: string;
+  //         channels: number;
+  //         sampleRate: number;
+  //       };
+  //     };
+  //   }[];
+  // }[];
 }
 
 export const SRTStreamUpdate = () =>
@@ -184,12 +159,9 @@ export const SRTStreamUpdate = () =>
         .get(process.env.SRT_STAT, {
           timeout: 300,
         })
-        .then((e) => e.data as SRTStream[])
-    : ([] as SRTStream[]);
-
-interface SRTStream {
-  name: string;
-  url: string;
-  clients: number;
-  created: string;
-}
+        .then((e) => e.data as SrtStream[])
+        .catch((e) => {
+          console.error(e);
+          return null;
+        })
+    : null;

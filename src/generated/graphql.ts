@@ -13,12 +13,6 @@ export type Scalars = {
   Float: number;
 };
 
-export type Query = {
-  __typename?: 'Query';
-  helloThere: Scalars['String'];
-  streamKeys?: Maybe<Array<Maybe<StreamKey>>>;
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   addStreamKey?: Maybe<StreamKey>;
@@ -64,6 +58,85 @@ export type MutationGenTempStreamKeyArgs = {
 
 export type MutationDeleteStreamKeyArgs = {
   streamKey: Scalars['String'];
+};
+
+export type Query = {
+  __typename?: 'Query';
+  helloThere: Scalars['String'];
+  streamKeys?: Maybe<Array<Maybe<StreamKey>>>;
+  streamApps: StreamApplications;
+};
+
+export type RtmpApplications = {
+  __typename?: 'RTMPApplications';
+  name?: Maybe<Scalars['String']>;
+  streams?: Maybe<Array<Maybe<RtmpStreams>>>;
+};
+
+export type RtmpAudio = {
+  __typename?: 'RTMPAudio';
+  codec?: Maybe<Scalars['String']>;
+  profile?: Maybe<Scalars['String']>;
+  channels?: Maybe<Scalars['Int']>;
+  sampleRate?: Maybe<Scalars['Float']>;
+};
+
+export type RtmpClients = {
+  __typename?: 'RTMPClients';
+  id?: Maybe<Scalars['Int']>;
+  address?: Maybe<Scalars['String']>;
+  time?: Maybe<Scalars['Int']>;
+  flashVersion?: Maybe<Scalars['String']>;
+  dropped?: Maybe<Scalars['Int']>;
+  avSync?: Maybe<Scalars['Int']>;
+  timestamp?: Maybe<Scalars['Int']>;
+  publishing?: Maybe<Scalars['Boolean']>;
+  active?: Maybe<Scalars['Boolean']>;
+};
+
+export type RtmpMeta = {
+  __typename?: 'RTMPMeta';
+  video?: Maybe<RtmpVideo>;
+  audio?: Maybe<RtmpAudio>;
+};
+
+export type RtmpStreams = {
+  __typename?: 'RTMPStreams';
+  name?: Maybe<Scalars['String']>;
+  time?: Maybe<Scalars['Int']>;
+  bwIn?: Maybe<Scalars['Int']>;
+  bytesIn?: Maybe<Scalars['Int']>;
+  bwOut?: Maybe<Scalars['Int']>;
+  bytesOut?: Maybe<Scalars['Int']>;
+  bwAudio?: Maybe<Scalars['Int']>;
+  bwVideo?: Maybe<Scalars['Int']>;
+  clients?: Maybe<Array<Maybe<RtmpClients>>>;
+  meta?: Maybe<RtmpMeta>;
+};
+
+export type RtmpVideo = {
+  __typename?: 'RTMPVideo';
+  width?: Maybe<Scalars['Int']>;
+  height?: Maybe<Scalars['Int']>;
+  framerate?: Maybe<Scalars['Float']>;
+  codec?: Maybe<Scalars['String']>;
+  profile?: Maybe<Scalars['String']>;
+  compat?: Maybe<Scalars['String']>;
+  level?: Maybe<Scalars['Float']>;
+};
+
+export type SrtStream = {
+  __typename?: 'SRTStream';
+  name?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
+  clients?: Maybe<Scalars['Int']>;
+  created?: Maybe<Scalars['String']>;
+};
+
+export type StreamApplications = {
+  __typename?: 'StreamApplications';
+  srt: Array<Maybe<SrtStream>>;
+  rtmp: Array<Maybe<RtmpApplications>>;
 };
 
 export type StreamKey = {
@@ -153,25 +226,40 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Query: ResolverTypeWrapper<{}>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   Mutation: ResolverTypeWrapper<{}>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Query: ResolverTypeWrapper<{}>;
+  RTMPApplications: ResolverTypeWrapper<RtmpApplications>;
+  RTMPAudio: ResolverTypeWrapper<RtmpAudio>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
+  RTMPClients: ResolverTypeWrapper<RtmpClients>;
+  RTMPMeta: ResolverTypeWrapper<RtmpMeta>;
+  RTMPStreams: ResolverTypeWrapper<RtmpStreams>;
+  RTMPVideo: ResolverTypeWrapper<RtmpVideo>;
+  SRTStream: ResolverTypeWrapper<SrtStream>;
+  StreamApplications: ResolverTypeWrapper<StreamApplications>;
   StreamKey: ResolverTypeWrapper<StreamKey>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Query: {};
-  String: Scalars['String'];
   Mutation: {};
+  String: Scalars['String'];
   Boolean: Scalars['Boolean'];
+  Query: {};
+  RTMPApplications: RtmpApplications;
+  RTMPAudio: RtmpAudio;
+  Int: Scalars['Int'];
+  Float: Scalars['Float'];
+  RTMPClients: RtmpClients;
+  RTMPMeta: RtmpMeta;
+  RTMPStreams: RtmpStreams;
+  RTMPVideo: RtmpVideo;
+  SRTStream: SrtStream;
+  StreamApplications: StreamApplications;
   StreamKey: StreamKey;
-};
-
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  helloThere?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  streamKeys?: Resolver<Maybe<Array<Maybe<ResolversTypes['StreamKey']>>>, ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -180,6 +268,84 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   editStreamKey?: Resolver<Maybe<ResolversTypes['StreamKey']>, ParentType, ContextType, RequireFields<MutationEditStreamKeyArgs, 'streamKey'>>;
   genTempStreamKey?: Resolver<Maybe<ResolversTypes['StreamKey']>, ParentType, ContextType, RequireFields<MutationGenTempStreamKeyArgs, 'start' | 'end'>>;
   deleteStreamKey?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteStreamKeyArgs, 'streamKey'>>;
+};
+
+export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  helloThere?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  streamKeys?: Resolver<Maybe<Array<Maybe<ResolversTypes['StreamKey']>>>, ParentType, ContextType>;
+  streamApps?: Resolver<ResolversTypes['StreamApplications'], ParentType, ContextType>;
+};
+
+export type RtmpApplicationsResolvers<ContextType = any, ParentType extends ResolversParentTypes['RTMPApplications'] = ResolversParentTypes['RTMPApplications']> = {
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  streams?: Resolver<Maybe<Array<Maybe<ResolversTypes['RTMPStreams']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RtmpAudioResolvers<ContextType = any, ParentType extends ResolversParentTypes['RTMPAudio'] = ResolversParentTypes['RTMPAudio']> = {
+  codec?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  profile?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  channels?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  sampleRate?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RtmpClientsResolvers<ContextType = any, ParentType extends ResolversParentTypes['RTMPClients'] = ResolversParentTypes['RTMPClients']> = {
+  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  time?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  flashVersion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  dropped?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  avSync?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  timestamp?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  publishing?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RtmpMetaResolvers<ContextType = any, ParentType extends ResolversParentTypes['RTMPMeta'] = ResolversParentTypes['RTMPMeta']> = {
+  video?: Resolver<Maybe<ResolversTypes['RTMPVideo']>, ParentType, ContextType>;
+  audio?: Resolver<Maybe<ResolversTypes['RTMPAudio']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RtmpStreamsResolvers<ContextType = any, ParentType extends ResolversParentTypes['RTMPStreams'] = ResolversParentTypes['RTMPStreams']> = {
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  time?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  bwIn?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  bytesIn?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  bwOut?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  bytesOut?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  bwAudio?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  bwVideo?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  clients?: Resolver<Maybe<Array<Maybe<ResolversTypes['RTMPClients']>>>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['RTMPMeta']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RtmpVideoResolvers<ContextType = any, ParentType extends ResolversParentTypes['RTMPVideo'] = ResolversParentTypes['RTMPVideo']> = {
+  width?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  height?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  framerate?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  codec?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  profile?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  compat?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  level?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SrtStreamResolvers<ContextType = any, ParentType extends ResolversParentTypes['SRTStream'] = ResolversParentTypes['SRTStream']> = {
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  clients?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  created?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StreamApplicationsResolvers<ContextType = any, ParentType extends ResolversParentTypes['StreamApplications'] = ResolversParentTypes['StreamApplications']> = {
+  srt?: Resolver<Array<Maybe<ResolversTypes['SRTStream']>>, ParentType, ContextType>;
+  rtmp?: Resolver<Array<Maybe<ResolversTypes['RTMPApplications']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type StreamKeyResolvers<ContextType = any, ParentType extends ResolversParentTypes['StreamKey'] = ResolversParentTypes['StreamKey']> = {
@@ -192,8 +358,16 @@ export type StreamKeyResolvers<ContextType = any, ParentType extends ResolversPa
 };
 
 export type Resolvers<ContextType = any> = {
-  Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  Query?: QueryResolvers<ContextType>;
+  RTMPApplications?: RtmpApplicationsResolvers<ContextType>;
+  RTMPAudio?: RtmpAudioResolvers<ContextType>;
+  RTMPClients?: RtmpClientsResolvers<ContextType>;
+  RTMPMeta?: RtmpMetaResolvers<ContextType>;
+  RTMPStreams?: RtmpStreamsResolvers<ContextType>;
+  RTMPVideo?: RtmpVideoResolvers<ContextType>;
+  SRTStream?: SrtStreamResolvers<ContextType>;
+  StreamApplications?: StreamApplicationsResolvers<ContextType>;
   StreamKey?: StreamKeyResolvers<ContextType>;
 };
 
