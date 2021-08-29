@@ -41,9 +41,12 @@ export const apolloServerConfig: ApolloServerExpressConfig = {
 export const pubsub = new PubSub();
 
 export async function pollStreamServers() {
-  let newRTMPData = await RTMPStreamUpdate();
-  // let newSRTData = await SRTStreamUpdate();
-  // let newStreamsData = { rtmp: newRTMPData, srt: newSRTData };
-  // console.log(newStreamsData);
+  const newRTMPData = await RTMPStreamUpdate();
+  const newSRTData = await SRTStreamUpdate();
+  const newStreamsData = {
+    rtmp: newRTMPData.applications,
+    srt: newSRTData,
+  };
+  console.log(newStreamsData);
   // pubsub.publish("STREAMS_CHANGED", { streamsChanged: newData });
 }
