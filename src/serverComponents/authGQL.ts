@@ -21,7 +21,7 @@ export const checkJWTCookie = ({
   }
 
   // Check for cookie's existence
-  if (cookies.token == undefined)
+  if (!cookies || !cookies.token)
     throw new AuthenticationError("No token cookie provided");
 
   const token = cookies.token;

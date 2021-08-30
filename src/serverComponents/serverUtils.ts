@@ -39,10 +39,7 @@ export const apolloServerConfig: ApolloServerExpressConfig = {
   context: ({ req, connection }) => checkJWTCookie({ req, connection }), //.req.cookies?.token),
   subscriptions: {
     onConnect: (_connectionParams, _webSocket, context) => {
-      const cookieObj = cookieString.parse(
-        context.request.headers.cookie ?? ""
-      );
-      return cookieObj;
+      return cookieString.parse(context.request.headers.cookie ?? "");
     },
   },
 };

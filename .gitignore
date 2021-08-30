@@ -7,3 +7,5 @@ certs/
 .idea/
 yarn-error.log
 .DS_Store
+cobra.db
+cobra.db-journal

@@ -61,6 +61,8 @@ Be sure to set the environment variables in both the root of the project and in 
 
 `yarn server` - builds just server
 
+`npx prisma migrate deploy` - creates a new blank sqlite DB with all tables or updates your old cobra table to a newer schema
+
 This site uses jwt cookies which are assumed to be from the same domain this is being run on. To get this to work for development so your browser actually sends the cookies:
 * modify your hosts file
 
@@ -79,21 +81,8 @@ to make safari work on mac
 - [ ] Milestone 3 - ASP & BOA support
 
 ### Other
-- [ ] SRT support via SLS
+- [x] SRT support via SLS
 - [ ] Playback authentication
-- [ ] Public streams endpoint
 - [ ] Setup guide
 - [ ] NGINX RTMP control module support
 - [ ] Other database support
-
-## Schema
-```
-CREATE TABLE streamKeys (
-    streamKey VARCHAR (24) PRIMARY KEY
-                           NOT NULL,
-    pwd       VARCHAR (24),
-    alias     TEXT,
-    start     DATETIME,
-    [end]     DATETIME
-);
-```

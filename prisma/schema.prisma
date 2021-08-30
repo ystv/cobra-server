@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:../cobra.sqlite"
+  url      = "file:../cobra.db"
 }
 
 model streamKeys {

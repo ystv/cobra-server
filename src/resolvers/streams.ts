@@ -1,3 +1,5 @@
+// noinspection SpellCheckingInspection
+
 import axios from "axios";
 import { transform } from "camaro";
 import {

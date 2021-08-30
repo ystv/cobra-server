@@ -58,11 +58,10 @@ export const editStreamKey = async (
       throw new UserInputError("StreamKey does not exist");
     });
 
-  const updatedKey = await prisma.streamKeys.findUnique({
+  return await prisma.streamKeys.findUnique({
     where: { streamKey: args.streamKey },
     rejectOnNotFound: true,
   });
-  return updatedKey;
 };
 
 export const deleteStreamKey = (

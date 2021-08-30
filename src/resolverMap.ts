@@ -20,23 +20,6 @@
 //     signal: "NONE",
 //   },
 // ];
-//
-// const resolverMap: IResolvers = {
-//   Subscription: {
-//     streamsChanged: {
-//       subscribe: () => pubsub.asyncIterator("STREAMS_CHANGED"),
-//     },
-//   },
-// };
-// export default resolverMap;
-//
-// }
-//
-//
-// export async function pollStreamServers() {
-//   let newData = await RTMPStreamUpdate();
-//   pubsub.publish("STREAMS_CHANGED", { streamsChanged: newData });
-// }
 
 import { Resolvers } from "./generated/graphql";
 import {
