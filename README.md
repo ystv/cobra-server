@@ -22,6 +22,8 @@ Neat admin interface for managing keys.
 
 GraphQL data interface for Nginx RTMP module (polls stat page ever second and sends updates over gql subscriptions)
 
+Split from old Monorepo into separate client and software (too many headaches with browser security in development)
+
 client software auth done by checking cookies for cookie "token" containing jwt with the data form {..., perms: [{..., name: "SuperUser"}]}
 ## WARNING
 
@@ -43,23 +45,19 @@ stream should go to rtmp://{nginx_address}:1935/{application}/{streamkey}?pwd={p
 ## Running
 Be sure to set the environment variables in both the root of the project and in the client folder (the latter especially if you are running a live dev copy)
 
-`yarn start` - launches compiled server and client
+`yarn start` - launches compiled server
 
-`yarn build` - builds client and server
+`yarn build` - builds server
 
 ---
 
 `yarn dev` - launches both client and server interactively
 
+`yarn lint`
+
+`yarn generate` - generates prisma client and graphql to ts types based on the respective schemas
+
 ---
-
-`yarn client:dev` - launches React development mode
-
-`yarn server:dev` - launches interactive server
-
-`yarn client` - builds just client
-
-`yarn server` - builds just server
 
 `npx prisma migrate deploy` - creates a new blank sqlite DB with all tables or updates your old cobra table to a newer schema
 
