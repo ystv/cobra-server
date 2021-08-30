@@ -148,6 +148,11 @@ export type StreamKey = {
   end?: Maybe<Scalars['String']>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  StreamAppsUpdate: StreamApplications;
+};
+
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -241,6 +246,7 @@ export type ResolversTypes = {
   SRTStream: ResolverTypeWrapper<SrtStream>;
   StreamApplications: ResolverTypeWrapper<StreamApplications>;
   StreamKey: ResolverTypeWrapper<StreamKey>;
+  Subscription: ResolverTypeWrapper<{}>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -260,6 +266,7 @@ export type ResolversParentTypes = {
   SRTStream: SrtStream;
   StreamApplications: StreamApplications;
   StreamKey: StreamKey;
+  Subscription: {};
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -357,6 +364,10 @@ export type StreamKeyResolvers<ContextType = any, ParentType extends ResolversPa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  StreamAppsUpdate?: SubscriptionResolver<ResolversTypes['StreamApplications'], "StreamAppsUpdate", ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
@@ -369,6 +380,7 @@ export type Resolvers<ContextType = any> = {
   SRTStream?: SrtStreamResolvers<ContextType>;
   StreamApplications?: StreamApplicationsResolvers<ContextType>;
   StreamKey?: StreamKeyResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
 };
 
 

@@ -35,6 +35,10 @@ type Mutation {
   deleteStreamKey(streamKey: String!): Boolean
 }
 
+type Subscription {
+  StreamAppsUpdate: StreamApplications!
+}
+
 type StreamKey {
   streamKey: String!
   pwd: String

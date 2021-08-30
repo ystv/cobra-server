@@ -48,6 +48,7 @@ import {
   getStreamKeys,
 } from "./resolvers/streamKey";
 import { getStreamApplications } from "./resolvers/streams";
+import { pubSub } from "./serverComponents/serverUtils";
 
 const resolvers: Resolvers = {
   Query: {
@@ -66,6 +67,11 @@ const resolvers: Resolvers = {
     editStreamKey: (_parent, args) => editStreamKey(args),
     genTempStreamKey: (_parent, args) => genStreamKey(args),
     addGenPwdStreamKey: (_parent, args) => addGenPwdStreamKey(args),
+  },
+  Subscription: {
+    StreamAppsUpdate: {
+      subscribe: () => pubSub.asyncIterator("StreamAppsUpdated"),
+    },
   },
 };
 

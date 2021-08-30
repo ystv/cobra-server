@@ -1,20 +1,3 @@
-// var cookieString = require("cookie");
-//
-//
-// const server = new ApolloServer({
-//   subscriptions: {
-//     onConnect: (connectionParams: any, webSocket, context) => {
-//       let cookieObj = cookieString.parse(context.request.headers.cookie);
-//       let wsCookie = cookieObj.token;
-//       if (wsCookie) {
-//         return checkAuthCookie(wsCookie);
-//       }
-//
-//       throw new Error("Missing cookie in socket!");
-//     },
-//   },
-// });
-
 import dotEnvFlow from "dotenv-flow";
 
 dotEnvFlow.config();

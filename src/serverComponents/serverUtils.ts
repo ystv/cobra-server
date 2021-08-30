@@ -9,6 +9,7 @@ import * as typeDefs from "../schema/schema.graphql";
 import { Request, Response } from "express";
 import { checkJWTCookie } from "./authGQL";
 import { getStreamApplications } from "../resolvers/streams";
+import cookieString from "cookie";
 
 export const schema: GraphQLSchema = makeExecutableSchema({
   typeDefs,
@@ -35,13 +36,19 @@ export const apolloServerConfig: ApolloServerExpressConfig = {
       "request.credentials": "include",
     },
   },
-  context: (req) => checkJWTCookie(req),
+  context: ({ req, connection }) => checkJWTCookie({ req, connection }), //.req.cookies?.token),
+  subscriptions: {
+    onConnect: (_connectionParams, _webSocket, context) => {
+      const cookieObj = cookieString.parse(
+        context.request.headers.cookie ?? ""
+      );
+      return cookieObj;
+    },
+  },
 };
 
-export const pubsub = new PubSub();
+export const pubSub = new PubSub();
 
-export async function pollStreamServers() {
-  const newData = await getStreamApplications();
-  // console.log(newData);
-  // pubsub.publish("STREAMS_CHANGED", { streamsChanged: newData });
+export async function pollStreamServers(): Promise<void> {
+  await getStreamApplications();
 }

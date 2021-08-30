@@ -5,22 +5,26 @@ import {
   SrtStream,
   StreamApplications,
 } from "../generated/graphql";
+import { pubSub } from "../serverComponents/serverUtils";
 
-export const getStreamApplications = async () => {
+export const getStreamApplications = async (): Promise<StreamApplications> => {
   const newRTMPData = await RTMPStreamUpdate();
   const newSRTData = await SRTStreamUpdate();
   const newStreamsData: StreamApplications = {
     rtmp: newRTMPData ? newRTMPData.applications : [],
     srt: newSRTData ?? [],
   };
+  await pubSub.publish("StreamAppsUpdated", {
+    StreamAppsUpdate: newStreamsData,
+  });
   return newStreamsData;
 };
 
-export const RTMPStreamUpdate = () =>
-  process.env.RTMP_STAT
+export const RTMPStreamUpdate = (): Promise<RTMPResponse | null> | null =>
+  process.env.RTMP_ENABLE == "true" && process.env.RTMP_STAT
     ? axios
         .get(process.env.RTMP_STAT, {
-          timeout: 300,
+          timeout: 500,
         })
         .then(async (e) => {
           const json: RTMPResponse = await transform(
@@ -29,8 +33,8 @@ export const RTMPStreamUpdate = () =>
           );
           return json;
         })
-        .catch((e) => {
-          console.error(e);
+        .catch(() => {
+          console.error("No RTMP");
           return null;
         })
     : null;
@@ -110,58 +114,17 @@ interface RTMPResponse {
   bwOut: number;
   bytesOut: number;
   applications: RtmpApplications[];
-  // applications: {
-  //   name: string;
-  //   streams: {
-  //     name: string;
-  //     time: number;
-  //     bwIn: number;
-  //     bytesIn: number;
-  //     bwOut: number;
-  //     bytesOut: number;
-  //     bwAudio: number;
-  //     bwVideo: number;
-  //     clients: {
-  //       id: number;
-  //       address: string;
-  //       time: number;
-  //       flashVersion: string;
-  //       dropped: number;
-  //       avSync: number;
-  //       timestamp: number;
-  //       publishing: boolean;
-  //       active: boolean;
-  //     }[];
-  //     meta: {
-  //       video: {
-  //         width: number;
-  //         height: number;
-  //         framerate: number;
-  //         codec: string;
-  //         profile: string;
-  //         compat: string;
-  //         level: number;
-  //       };
-  //       audio: {
-  //         codec: string;
-  //         profile: string;
-  //         channels: number;
-  //         sampleRate: number;
-  //       };
-  //     };
-  //   }[];
-  // }[];
 }
 
-export const SRTStreamUpdate = () =>
-  process.env.SRT_STAT
+export const SRTStreamUpdate = (): Promise<SrtStream[] | null> | null =>
+  process.env.SRT_ENABLE == "true" && process.env.SRT_STAT
     ? axios
         .get(process.env.SRT_STAT, {
-          timeout: 300,
+          timeout: 500,
         })
         .then((e) => e.data as SrtStream[])
-        .catch((e) => {
-          console.error(e);
+        .catch(() => {
+          console.error("No SRT");
           return null;
         })
     : null;
