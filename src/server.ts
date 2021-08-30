@@ -36,25 +36,30 @@ app.post("/key-check", (req, res) => authStream(req, res));
 
 // Create HTTP server and attach express
 const httpServer = http.createServer(app);
-const httpsServer = https.createServer(
-  {
-    key: fs.readFileSync("certs/server.key"),
-    cert: fs.readFileSync("certs/server.cert"),
-  },
-  app
-);
 
 // Add websocket capabilities to http servers
 server.installSubscriptionHandlers(httpServer);
-server.installSubscriptionHandlers(httpsServer);
 
 // Start HTTP servers
 httpServer.listen(80, () => {
   console.log("HTTP Server running on port 80");
 });
 
-httpsServer.listen(443, () => {
-  console.log("HTTPS Server running on port 443");
-});
+// Do it all again for https
+if (process.env.DISABLE_SSL !== "true") {
+  const httpsServer = https.createServer(
+    {
+      key: fs.readFileSync("certs/server.key"),
+      cert: fs.readFileSync("certs/server.cert"),
+    },
+    app
+  );
+
+  server.installSubscriptionHandlers(httpsServer);
+
+  httpsServer.listen(443, () => {
+    console.log("HTTPS Server running on port 443");
+  });
+}
 
 setInterval(pollStreamServers, 1000);
