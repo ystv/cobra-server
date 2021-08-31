@@ -15,7 +15,7 @@ model streamKeys {
   end       String?
 }
 
-model ASPS {
+model ASPs {
     name            String  @id
     hwID            String
     sourceURL       String?

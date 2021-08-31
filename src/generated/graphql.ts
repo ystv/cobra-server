@@ -81,6 +81,13 @@ export type Query = {
   helloThere: Scalars['String'];
   streamKeys?: Maybe<Array<Maybe<StreamKey>>>;
   streamApps: StreamApplications;
+  ASPs?: Maybe<Array<Maybe<Asp>>>;
+  ASP?: Maybe<Asp>;
+};
+
+
+export type QueryAspArgs = {
+  name: Scalars['String'];
 };
 
 export type RtmpApplications = {
@@ -311,6 +318,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   helloThere?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   streamKeys?: Resolver<Maybe<Array<Maybe<ResolversTypes['StreamKey']>>>, ParentType, ContextType>;
   streamApps?: Resolver<ResolversTypes['StreamApplications'], ParentType, ContextType>;
+  ASPs?: Resolver<Maybe<Array<Maybe<ResolversTypes['ASP']>>>, ParentType, ContextType>;
+  ASP?: Resolver<Maybe<ResolversTypes['ASP']>, ParentType, ContextType, RequireFields<QueryAspArgs, 'name'>>;
 };
 
 export type RtmpApplicationsResolvers<ContextType = any, ParentType extends ResolversParentTypes['RTMPApplications'] = ResolversParentTypes['RTMPApplications']> = {

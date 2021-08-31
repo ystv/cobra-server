@@ -1,7 +1,7 @@
 # noinspection GraphQLTypeRedefinition
 type Query {
     helloThere: String!
-    streamKeys: [StreamKey]
+    streamKeys: [StreamKey]!
     streamApps: StreamApplications!
     ASPs: [ASP]
     ASP(name: String!): ASP

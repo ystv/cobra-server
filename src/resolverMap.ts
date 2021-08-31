@@ -9,6 +9,7 @@ import {
 } from "./resolvers/streamKey";
 import { getStreamApplications } from "./resolvers/streams";
 import { pubSub } from "./serverComponents/serverUtils";
+import { getASP, getASPs } from "./resolvers/ASP";
 
 const resolvers: Resolvers = {
   Query: {
@@ -19,6 +20,10 @@ const resolvers: Resolvers = {
 
     // streams
     streamApps: () => getStreamApplications(),
+
+    // ASPs
+    ASPs: () => getASPs(),
+    ASP: (_parent, args) => getASP(args),
   },
   Mutation: {
     // streamKeys
