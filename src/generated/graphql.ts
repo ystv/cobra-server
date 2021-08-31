@@ -13,6 +13,22 @@ export type Scalars = {
   Float: number;
 };
 
+export type Asp = {
+  __typename?: 'ASP';
+  hwID: Scalars['ID'];
+  name: Scalars['String'];
+  sourceURL?: Maybe<Scalars['String']>;
+  enablePlayback: Scalars['Boolean'];
+  currentState: AspState;
+};
+
+export enum AspState {
+  Offline = 'OFFLINE',
+  Playing = 'PLAYING',
+  Error = 'ERROR',
+  Ready = 'READY'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   addStreamKey?: Maybe<StreamKey>;
@@ -231,9 +247,12 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Mutation: ResolverTypeWrapper<{}>;
+  ASP: ResolverTypeWrapper<Asp>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  ASPState: AspState;
+  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   RTMPApplications: ResolverTypeWrapper<RtmpApplications>;
   RTMPAudio: ResolverTypeWrapper<RtmpAudio>;
@@ -251,9 +270,11 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Mutation: {};
+  ASP: Asp;
+  ID: Scalars['ID'];
   String: Scalars['String'];
   Boolean: Scalars['Boolean'];
+  Mutation: {};
   Query: {};
   RTMPApplications: RtmpApplications;
   RTMPAudio: RtmpAudio;
@@ -267,6 +288,15 @@ export type ResolversParentTypes = {
   StreamApplications: StreamApplications;
   StreamKey: StreamKey;
   Subscription: {};
+};
+
+export type AspResolvers<ContextType = any, ParentType extends ResolversParentTypes['ASP'] = ResolversParentTypes['ASP']> = {
+  hwID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  sourceURL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  enablePlayback?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  currentState?: Resolver<ResolversTypes['ASPState'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -369,6 +399,7 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type Resolvers<ContextType = any> = {
+  ASP?: AspResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   RTMPApplications?: RtmpApplicationsResolvers<ContextType>;

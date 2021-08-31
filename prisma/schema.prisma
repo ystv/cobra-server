@@ -14,3 +14,10 @@ model streamKeys {
   start     String?
   end       String?
 }
+
+model ASPS {
+    name            String  @id
+    hwID            String
+    sourceURL       String?
+    enablePlayback  Boolean
+}

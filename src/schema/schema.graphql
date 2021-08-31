@@ -1,112 +1,131 @@
 # noinspection GraphQLTypeRedefinition
 type Query {
-  helloThere: String!
-  streamKeys: [StreamKey]
-  streamApps: StreamApplications!
+    helloThere: String!
+    streamKeys: [StreamKey]
+    streamApps: StreamApplications!
+    ASPs: [ASP]
+    ASP(name: String!): ASP
 }
 
 type Mutation {
 
-  addStreamKey(
-    streamKey: String!
-    pwd: String
-    alias: String
-    start: String
-    end: String
-  ): StreamKey
+    addStreamKey(
+        streamKey: String!
+        pwd: String
+        alias: String
+        start: String
+        end: String
+    ): StreamKey
 
-  addGenPwdStreamKey(
-    streamKey: String!
-    alias: String
-    start: String
-    end: String
-  ): StreamKey
+    addGenPwdStreamKey(
+        streamKey: String!
+        alias: String
+        start: String
+        end: String
+    ): StreamKey
 
-  editStreamKey(
-    streamKey: String!
-    pwd: String
-    alias: String
-    start: String
-    end: String
-  ): StreamKey
+    editStreamKey(
+        streamKey: String!
+        pwd: String
+        alias: String
+        start: String
+        end: String
+    ): StreamKey
 
-  genTempStreamKey(alias: String, start: String!, end: String!): StreamKey
+    genTempStreamKey(alias: String, start: String!, end: String!): StreamKey
 
-  deleteStreamKey(streamKey: String!): Boolean
+    deleteStreamKey(streamKey: String!): Boolean
 }
 
 type Subscription {
-  StreamAppsUpdate: StreamApplications!
+    StreamAppsUpdate: StreamApplications!
 }
 
 type StreamKey {
-  streamKey: String!
-  pwd: String
-  alias: String
-  start: String
-  end: String
+    streamKey: String!
+    pwd: String
+    alias: String
+    start: String
+    end: String
+}
+
+type ASP {
+    hwID: ID! # Used as hashed api key
+    name: String!
+    sourceURL: String
+    enablePlayback: Boolean!
+    #  options: null
+    currentState: ASPState!
+    #  children: [ID]
+}
+
+enum ASPState {
+    OFFLINE
+    PLAYING
+    ERROR
+    READY
 }
 
 type StreamApplications {
-  srt: [SRTStream]!
-  rtmp: [RTMPApplications]!
+    srt: [SRTStream]!
+    rtmp: [RTMPApplications]!
 }
 
 type RTMPApplications {
-  name: String
-  streams: [RTMPStreams]
+    name: String
+    streams: [RTMPStreams]
 }
 
 type RTMPStreams {
-  name: String
-  time: Int
-  bwIn: Int
-  bytesIn: Int
-  bwOut: Int
-  bytesOut: Int
-  bwAudio: Int
-  bwVideo: Int
-  clients: [RTMPClients]
-  meta: RTMPMeta
+    name: String
+    time: Int
+    bwIn: Int
+    bytesIn: Int
+    bwOut: Int
+    bytesOut: Int
+    bwAudio: Int
+    bwVideo: Int
+    clients: [RTMPClients]
+    meta: RTMPMeta
 }
 
 type RTMPMeta{
-  video: RTMPVideo
-  audio: RTMPAudio
+    video: RTMPVideo
+    audio: RTMPAudio
 }
 
 type RTMPVideo {
-  width: Int
-  height: Int
-  framerate: Float
-  codec: String
-  profile: String
-  compat: String
-  level: Float
+    width: Int
+    height: Int
+    framerate: Float
+    codec: String
+    profile: String
+    compat: String
+    level: Float
 }
 
 type RTMPAudio {
-  codec: String
-  profile: String
-  channels: Int
-  sampleRate: Float
+    codec: String
+    profile: String
+    channels: Int
+    sampleRate: Float
 }
 
 type RTMPClients {
-  id: Int
-  address: String
-  time: Int
-  flashVersion: String
-  dropped: Int
-  avSync: Int
-  timestamp: Int
-  publishing: Boolean
-  active: Boolean
+    id: Int
+    address: String
+    time: Int
+    flashVersion: String
+    dropped: Int
+    avSync: Int
+    timestamp: Int
+    publishing: Boolean
+    active: Boolean
 }
 
 type SRTStream {
-  name: String
-  url: String
-  clients: Int
-  created: String
+    name: String
+    url: String
+    clients: Int
+    created: String
 }

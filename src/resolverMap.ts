@@ -1,26 +1,3 @@
-// const BOArray = [
-//   {
-//     id: "ab12dsd15s1d1s5",
-//     name: "Geneva",
-//     live: true,
-//     videoOptions: null,
-//     customDestination: null,
-//     protocol: "RTMP",
-//     state: "STREAMING",
-//     signal: "MED",
-//   },
-//   {
-//     id: "fsf151df51sf561",
-//     name: "London",
-//     live: false,
-//     videoOptions: null,
-//     customDestination: null,
-//     protocol: "RTMP",
-//     state: "OFFLINE",
-//     signal: "NONE",
-//   },
-// ];
-
 import { Resolvers } from "./generated/graphql";
 import {
   addGenPwdStreamKey,

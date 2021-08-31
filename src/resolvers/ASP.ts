@@ -1,0 +1,10 @@
+//   {
+//     id: "fsf151df51sf561",
+//     name: "London",
+//     live: false,
+//     videoOptions: null,
+//     customDestination: null,
+//     protocol: "RTMP",
+//     state: "OFFLINE",
+//     signal: "NONE",
+//   },
