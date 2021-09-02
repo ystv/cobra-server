@@ -41,8 +41,8 @@ const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
 // Start HTTP servers
-httpServer.listen(80, () => {
-  console.log("HTTP Server running on port 80");
+httpServer.listen(process.env.HTTP_PORT ?? 80, () => {
+  console.log(`HTTP Server running on port ${process.env.HTTP_PORT ?? 80}`);
 });
 
 // Do it all again for https
@@ -57,8 +57,10 @@ if (process.env.DISABLE_SSL !== "true") {
 
   server.installSubscriptionHandlers(httpsServer);
 
-  httpsServer.listen(443, () => {
-    console.log("HTTPS Server running on port 443");
+  httpsServer.listen(process.env.HTTPS_PORT ?? 443, () => {
+    console.log(
+      `HTTPS Server running on port ${process.env.HTTPS_PORT ?? 443}`
+    );
   });
 }
 
