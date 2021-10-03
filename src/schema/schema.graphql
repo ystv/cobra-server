@@ -1,10 +1,20 @@
 # noinspection GraphQLTypeRedefinition
+directive @hasScope(scope: [AuthScopes]!) on FIELD_DEFINITION
+
+enum AuthScopes {
+    Guest
+    Admin
+    User
+    Boa
+    Asp
+}
+
 type Query {
-    helloThere: String!
-    streamKeys: [StreamKey]!
-    streamApps: StreamApplications!
-    ASPs: [ASP]
-    ASP(name: String!): ASP
+    helloThere: String! @hasScope(scope: [Guest])
+    streamKeys: [StreamKey]! @hasScope(scope: [Admin])
+    streamApps: StreamApplications! @hasScope(scope: [Admin])
+    ASPs: [ASP] @hasScope(scope: [Admin, Asp])
+    ASP(name: String!): ASP @hasScope(scope: [Admin, Asp])
 }
 
 type Mutation {
@@ -15,14 +25,14 @@ type Mutation {
         alias: String
         start: String
         end: String
-    ): StreamKey
+    ): StreamKey @hasScope(scope: [Admin])
 
     addGenPwdStreamKey(
         streamKey: String!
         alias: String
         start: String
         end: String
-    ): StreamKey
+    ): StreamKey @hasScope(scope: [Admin])
 
     editStreamKey(
         streamKey: String!
@@ -30,15 +40,15 @@ type Mutation {
         alias: String
         start: String
         end: String
-    ): StreamKey
+    ): StreamKey @hasScope(scope: [Admin])
 
-    genTempStreamKey(alias: String, start: String!, end: String!): StreamKey
+    genTempStreamKey(alias: String, start: String!, end: String!): StreamKey @hasScope(scope: [Admin])
 
-    deleteStreamKey(streamKey: String!): Boolean
+    deleteStreamKey(streamKey: String!): Boolean @hasScope(scope: [Admin])
 }
 
 type Subscription {
-    StreamAppsUpdate: StreamApplications!
+    StreamAppsUpdate: StreamApplications! @hasScope(scope: [Admin])
 }
 
 type StreamKey {

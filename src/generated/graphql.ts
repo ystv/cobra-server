@@ -13,6 +13,7 @@ export type Scalars = {
   Float: number;
 };
 
+
 export type Asp = {
   __typename?: 'ASP';
   hwID: Scalars['ID'];
@@ -27,6 +28,14 @@ export enum AspState {
   Playing = 'PLAYING',
   Error = 'ERROR',
   Ready = 'READY'
+}
+
+export enum AuthScopes {
+  Guest = 'Guest',
+  Admin = 'Admin',
+  User = 'User',
+  Boa = 'Boa',
+  Asp = 'Asp'
 }
 
 export type Mutation = {
@@ -79,7 +88,7 @@ export type MutationDeleteStreamKeyArgs = {
 export type Query = {
   __typename?: 'Query';
   helloThere: Scalars['String'];
-  streamKeys?: Maybe<Array<Maybe<StreamKey>>>;
+  streamKeys: Array<Maybe<StreamKey>>;
   streamApps: StreamApplications;
   ASPs?: Maybe<Array<Maybe<Asp>>>;
   ASP?: Maybe<Asp>;
@@ -259,6 +268,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   ASPState: AspState;
+  AuthScopes: AuthScopes;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   RTMPApplications: ResolverTypeWrapper<RtmpApplications>;
@@ -297,6 +307,10 @@ export type ResolversParentTypes = {
   Subscription: {};
 };
 
+export type HasScopeDirectiveArgs = {   scope: Array<Maybe<AuthScopes>>; };
+
+export type HasScopeDirectiveResolver<Result, Parent, ContextType = any, Args = HasScopeDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
 export type AspResolvers<ContextType = any, ParentType extends ResolversParentTypes['ASP'] = ResolversParentTypes['ASP']> = {
   hwID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -316,7 +330,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   helloThere?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  streamKeys?: Resolver<Maybe<Array<Maybe<ResolversTypes['StreamKey']>>>, ParentType, ContextType>;
+  streamKeys?: Resolver<Array<Maybe<ResolversTypes['StreamKey']>>, ParentType, ContextType>;
   streamApps?: Resolver<ResolversTypes['StreamApplications'], ParentType, ContextType>;
   ASPs?: Resolver<Maybe<Array<Maybe<ResolversTypes['ASP']>>>, ParentType, ContextType>;
   ASP?: Resolver<Maybe<ResolversTypes['ASP']>, ParentType, ContextType, RequireFields<QueryAspArgs, 'name'>>;
@@ -429,3 +443,13 @@ export type Resolvers<ContextType = any> = {
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
  */
 export type IResolvers<ContextType = any> = Resolvers<ContextType>;
+export type DirectiveResolvers<ContextType = any> = {
+  hasScope?: HasScopeDirectiveResolver<any, any, ContextType>;
+};
+
+
+/**
+ * @deprecated
+ * Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
+ */
+export type IDirectiveResolvers<ContextType = any> = DirectiveResolvers<ContextType>;

@@ -1,30 +1,33 @@
-import { AuthenticationError, ExpressContext } from "apollo-server-express";
+import {
+  AuthenticationError,
+  ExpressContext,
+  SchemaDirectiveVisitor,
+} from "apollo-server-express";
 import jwt from "jsonwebtoken";
 import { ExecutionParams } from "subscriptions-transport-ws";
-
+import { defaultFieldResolver, GraphQLField } from "graphql";
+import { AuthScopes } from "../generated/graphql";
 const secret: string = process.env.JWT_SECRET || "";
 
-export const checkJWTCookie = ({
+// Retrieves and validates credentials from a request
+export const getCredentialsFromReq = ({
   req,
   connection,
 }: {
   req?: ExpressContext["req"];
   connection?: ExecutionParams | undefined;
 }): jwtInterface => {
-  let user: jwtInterface;
-  let cookies = undefined;
-
+  // Get cookies
+  let cookies;
   if (connection) {
     cookies = connection.context;
   } else if (req) {
     cookies = req.cookies;
   }
 
-  // Check for cookie's existence
-  if (!cookies || !cookies.token)
-    throw new AuthenticationError("No token cookie provided");
-
   const token = cookies.token;
+
+  let user: jwtInterface;
 
   // Decode/verify token cookie
   try {
@@ -32,9 +35,6 @@ export const checkJWTCookie = ({
   } catch {
     throw new AuthenticationError("Invalid token");
   }
-  // For now only accept SuperUsers to the API
-  if (user.perms.find((o) => o.name === "SuperUser") == undefined)
-    throw new AuthenticationError("Incorrect Permissions");
 
   // Return the authenticated user into the context
   return user;
@@ -48,4 +48,40 @@ interface jwtInterface extends jwt.JwtPayload {
 interface jwtPermsInterface {
   id: number;
   name: string;
+}
+
+// Checks if the validated credentials have scope to access a field
+export class directiveHasScope extends SchemaDirectiveVisitor {
+  visitFieldDefinition(
+    field: GraphQLField<any, any>
+  ): GraphQLField<any, any> | void | null {
+    const scope: [AuthScopes] = this.args.scope.map(
+      (e: string) => (<any>AuthScopes)[e]
+    );
+
+    const { resolve = defaultFieldResolver } = field;
+
+    field.resolve = async function (...args) {
+      const context = args[2];
+      // console.log(context);
+      const token = context.perms; //context.headers.authorization;
+
+      if (scope.find((value) => value == AuthScopes.Guest))
+        return resolve.apply(this, args);
+
+      if (!token) {
+        throw new Error("Auth token not found");
+      }
+
+      if (userHasScope(scope)) {
+        return resolve.apply(this, args);
+      } else {
+        throw new Error("Not authorized");
+      }
+    };
+  }
+}
+
+function userHasScope(scope: [AuthScopes]) {
+  return true;
 }

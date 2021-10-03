@@ -7,13 +7,16 @@ import { GraphQLSchema } from "graphql";
 import resolvers from "../resolverMap";
 import * as typeDefs from "../schema/schema.graphql";
 import { Request, Response } from "express";
-import { checkJWTCookie } from "./authGQL";
+import { getCredentialsFromReq, directiveHasScope } from "./authGQL";
 import { getStreamApplications } from "../resolvers/streams";
 import cookieString from "cookie";
 
 export const schema: GraphQLSchema = makeExecutableSchema({
   typeDefs,
   resolvers: resolvers as any, // eslint-disable-line
+  schemaDirectives: {
+    hasScope: directiveHasScope,
+  },
 });
 
 export const nginxJoinCheck = (req: Request, res: Response): void => {
@@ -36,7 +39,7 @@ export const apolloServerConfig: ApolloServerExpressConfig = {
       "request.credentials": "include",
     },
   },
-  context: ({ req, connection }) => checkJWTCookie({ req, connection }), //.req.cookies?.token),
+  context: ({ req, connection }) => getCredentialsFromReq({ req, connection }), //.req.cookies?.token),
   subscriptions: {
     onConnect: (_connectionParams, _webSocket, context) => {
       return cookieString.parse(context.request.headers.cookie ?? "");
