@@ -71,6 +71,23 @@ to make safari work on mac
 * close keychain access and refresh
 
 
+###ToDo checklist on every deploy
+
+`sudo service cobra stop`
+
+`sudo git pull`
+
+`sudo yarn install --frozen-lockfile`
+
+`sudo yarn prisma migrate deploy`
+
+`sudo yarn generate`
+
+`sudo yarn build`
+
+`sudo service cobra start`
+
+
 
 ## Feature Timeline
 ### Main
