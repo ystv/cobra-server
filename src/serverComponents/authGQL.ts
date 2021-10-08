@@ -1,12 +1,9 @@
-import {
-  AuthenticationError,
-  ExpressContext,
-  SchemaDirectiveVisitor,
-} from "apollo-server-express";
+import { ExpressContext, SchemaDirectiveVisitor } from "apollo-server-express";
 import jwt from "jsonwebtoken";
 import { ExecutionParams } from "subscriptions-transport-ws";
 import { defaultFieldResolver, GraphQLField } from "graphql";
 import { AuthScopes } from "../generated/graphql";
+
 const secret: string = process.env.JWT_SECRET || "";
 
 // Retrieves and validates credentials from a request
@@ -16,7 +13,7 @@ export const getCredentialsFromReq = ({
 }: {
   req?: ExpressContext["req"];
   connection?: ExecutionParams | undefined;
-}): jwtInterface => {
+}): authInterface => {
   // Get cookies
   let cookies;
   if (connection) {
@@ -25,19 +22,29 @@ export const getCredentialsFromReq = ({
     cookies = req.cookies;
   }
 
-  const token = cookies.token;
+  // Get user auth
+  const cookieUserToken = cookies.token;
+  let user;
 
-  let user: jwtInterface;
+  if (cookieUserToken)
+    try {
+      user = jwt.verify(cookieUserToken, secret) as jwtInterface;
+    } catch {
+      // throw new AuthenticationError("Invalid token");
+    }
 
-  // Decode/verify token cookie
-  try {
-    user = jwt.verify(token, secret) as jwtInterface;
-  } catch {
-    throw new AuthenticationError("Invalid token");
-  }
+  // Get ASP auth
+  const cookieAspKey = cookies.token;
+  let asp = undefined;
+  if (cookieAspKey)
+    try {
+      //Check asp ID key
+    } catch {
+      // throw new AuthenticationError("Invalid token");
+    }
 
   // Return the authenticated user into the context
-  return user;
+  return { user, asp };
 };
 
 interface jwtInterface extends jwt.JwtPayload {
@@ -50,11 +57,17 @@ interface jwtPermsInterface {
   name: string;
 }
 
+interface authInterface {
+  user?: jwtInterface;
+  asp?: string;
+}
+
 // Checks if the validated credentials have scope to access a field
 export class directiveHasScope extends SchemaDirectiveVisitor {
   visitFieldDefinition(
     field: GraphQLField<any, any>
   ): GraphQLField<any, any> | void | null {
+    // Typecast scopes array
     const scope: [AuthScopes] = this.args.scope.map(
       (e: string) => (<any>AuthScopes)[e]
     );
@@ -62,18 +75,14 @@ export class directiveHasScope extends SchemaDirectiveVisitor {
     const { resolve = defaultFieldResolver } = field;
 
     field.resolve = async function (...args) {
-      const context = args[2];
+      const context = args[2] as authInterface;
       // console.log(context);
-      const token = context.perms; //context.headers.authorization;
 
+      // If guests are allowed then resolve immediately
       if (scope.find((value) => value == AuthScopes.Guest))
         return resolve.apply(this, args);
 
-      if (!token) {
-        throw new Error("Auth token not found");
-      }
-
-      if (userHasScope(scope)) {
+      if (userHasScope(context, scope)) {
         return resolve.apply(this, args);
       } else {
         throw new Error("Not authorized");
@@ -82,6 +91,18 @@ export class directiveHasScope extends SchemaDirectiveVisitor {
   }
 }
 
-function userHasScope(scope: [AuthScopes]) {
-  return true;
+function userHasScope(context: authInterface, scope: [AuthScopes]) {
+  if (context.user) {
+    if (scope.find((e) => e === AuthScopes.User)) return true;
+
+    if (
+      context.user.perms.find((e) => e.name === "SuperUser") &&
+      scope.find((e) => e === AuthScopes.Admin)
+    )
+      return true;
+  }
+
+  // if (context.asp && scope.find((e) => e === AuthScopes.Asp)) return true;
+
+  return false;
 }

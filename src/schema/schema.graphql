@@ -13,7 +13,7 @@ type Query {
     helloThere: String! @hasScope(scope: [Guest])
     streamKeys: [StreamKey]! @hasScope(scope: [Admin])
     streamApps: StreamApplications! @hasScope(scope: [Admin])
-    ASPs: [ASP] @hasScope(scope: [Admin, Asp])
+    ASPs: [ASP] @hasScope(scope: [Admin])
     ASP(name: String!): ASP @hasScope(scope: [Admin, Asp])
 }
 
