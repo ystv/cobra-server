@@ -38,7 +38,8 @@ export const addStreamKey = async (
 ): Promise<StreamKey> => {
   validateStreamKeyDates(args);
   await prisma.streamKeys.create({ data: args }).catch((err) => {
-    throw new UserInputError("StreamKey probably already exists", err);
+    console.log(err);
+    throw new UserInputError("StreamKey probably already exists");
   });
   return args;
 };
