@@ -29,10 +29,7 @@ export const RTMPStreamUpdate = (): Promise<RTMPResponse | null> | null =>
           timeout: 500,
         })
         .then(async (e) => {
-          const json: RTMPResponse = await transform(
-            e.data,
-            RTMPTransformObject
-          );
+          let json: RTMPResponse = await transform(e.data, RTMPTransformObject);
           return json;
         })
         .catch(() => {
@@ -83,19 +80,19 @@ const RTMPTransformObject = {
           ],
           meta: {
             video: {
-              width: "number(meta/video/width)",
-              height: "number(meta/video/height)",
-              framerate: "number(meta/video/frame_rate)",
+              width: "number(meta/video/width or Nil)",
+              height: "number(meta/video/height or Nil)",
+              framerate: "number(meta/video/frame_rate or Nil)",
               codec: "meta/video/codec",
               profile: "meta/video/profile",
               compat: "meta/video/compat",
-              level: "number(meta/video/level)",
+              level: "number(meta/video/level or Nil)",
             },
             audio: {
               codec: "meta/audio/codec",
               profile: "meta/audio/profile",
-              channels: "number(meta/audio/channels)",
-              sampleRate: "number(meta/audio/sample_rate)",
+              channels: "number(meta/audio/channels or Nil)",
+              sampleRate: "number(meta/audio/sample_rate or Nil)",
             },
           },
         },
