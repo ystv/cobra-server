@@ -37,8 +37,8 @@ export const addStreamKey = async (
   args: MutationAddStreamKeyArgs
 ): Promise<StreamKey> => {
   validateStreamKeyDates(args);
-  await prisma.streamKeys.create({ data: args }).catch(() => {
-    throw new UserInputError("StreamKey already exists");
+  await prisma.streamKeys.create({ data: args }).catch((err) => {
+    throw new UserInputError("StreamKey probably already exists", err);
   });
   return args;
 };
