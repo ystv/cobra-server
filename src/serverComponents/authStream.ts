@@ -16,11 +16,12 @@ function printTime(): string {
 }
 
 export const authStream = (req: Request, res: Response): void => {
-  if (req.body.app == "srt") {
-    // Temporary fix for NULL character bug with srtRelay
-    const pwdString = String(req.body.pwd);
-    req.body.pwd = pwdString.substr(0, pwdString.indexOf("\0"));
-  }
+  // FOR NOW IT SEEMS LIKE THIS BUG HAS BEEN SOLVED, BUT IF IT APPEARS AGAIN THIS SHOULD FIX IT
+  // if (req.body.app == "srt") {
+  //   // Temporary fix for NULL character bug with srtRelay
+  //   const pwdString = String(req.body.pwd);
+  //   req.body.pwd = pwdString.substr(0, pwdString.indexOf("\0"));
+  // }
 
   // Allow playback without auth - only check publishing
   // Allows for future secure playback function using potentially scoped and unique keys
