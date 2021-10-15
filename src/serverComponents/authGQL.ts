@@ -93,13 +93,18 @@ export class directiveHasScope extends SchemaDirectiveVisitor {
 
 function userHasScope(context: authInterface, scope: [AuthScopes]) {
   if (context.user) {
-    if (scope.find((e) => e === AuthScopes.User)) return true;
+    // If a user token exists, always allow SuperUsers, then check for COBRA permission,
+    // then see if standard users are allowed.
+
+    if (context.user.perms.find((e) => e.name === "SuperUser")) return true;
 
     if (
-      context.user.perms.find((e) => e.name === "SuperUser") &&
+      context.user.perms.find((e) => e.name === "COBRA") &&
       scope.find((e) => e === AuthScopes.Admin)
     )
       return true;
+
+    if (scope.find((e) => e === AuthScopes.User)) return true;
   }
 
   // if (context.asp && scope.find((e) => e === AuthScopes.Asp)) return true;
