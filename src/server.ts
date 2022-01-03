@@ -17,6 +17,8 @@ import {
   pollStreamServers,
 } from "./serverComponents/serverUtils";
 import { authStream } from "./serverComponents/authStream";
+import { exposeMetrics } from "./serverComponents/metrics";
+import prom from "prom-client";
 
 // Create express and Apollo handlers
 const app = express();
@@ -33,6 +35,16 @@ server.applyMiddleware({ app });
 app.get("/", (req, res) => nginxJoinCheck(req, res));
 app.get("/healthZ", (req, res) => healthZCheck(req, res));
 app.post("/key-check", (req, res) => authStream(req, res));
+
+// Metrics
+if (process.env.PROMETHEUS_ENABLE === "true") {
+  exposeMetrics();
+  app.get("/metrics", async (req, res) => {
+    res.set("Content-Type", "text/plain; version=0.0.4");
+    const metrics = await prom.register.metrics();
+    res.status(200).send(metrics);
+  })
+}
 
 // Create HTTP server and attach express
 const httpServer = http.createServer(app);
