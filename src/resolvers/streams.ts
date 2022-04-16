@@ -109,9 +109,9 @@ interface RTMPResponse {
   uptime: number;
   nAccepted: number;
   bwIn: number;
-  bytesIn: number;
+  bytesIn: string;
   bwOut: number;
-  bytesOut: number;
+  bytesOut: string;
   applications: RtmpApplications[];
 }
 

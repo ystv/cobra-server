@@ -137,9 +137,9 @@ export type RtmpStreams = {
   name?: Maybe<Scalars['String']>;
   time?: Maybe<Scalars['Int']>;
   bwIn?: Maybe<Scalars['Int']>;
-  bytesIn?: Maybe<Scalars['Int']>;
+  bytesIn?: Maybe<Scalars['String']>;
   bwOut?: Maybe<Scalars['Int']>;
-  bytesOut?: Maybe<Scalars['Int']>;
+  bytesOut?: Maybe<Scalars['String']>;
   bwAudio?: Maybe<Scalars['Int']>;
   bwVideo?: Maybe<Scalars['Int']>;
   clients?: Maybe<Array<Maybe<RtmpClients>>>;
@@ -373,9 +373,9 @@ export type RtmpStreamsResolvers<ContextType = any, ParentType extends Resolvers
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   time?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   bwIn?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  bytesIn?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  bytesIn?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   bwOut?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  bytesOut?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  bytesOut?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   bwAudio?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   bwVideo?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   clients?: Resolver<Maybe<Array<Maybe<ResolversTypes['RTMPClients']>>>, ParentType, ContextType>;

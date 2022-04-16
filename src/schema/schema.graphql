@@ -90,9 +90,9 @@ type RTMPStreams {
     name: String
     time: Int
     bwIn: Int
-    bytesIn: Int
+    bytesIn: String
     bwOut: Int
-    bytesOut: Int
+    bytesOut: String
     bwAudio: Int
     bwVideo: Int
     clients: [RTMPClients]
