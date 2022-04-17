@@ -14,27 +14,24 @@ export const getCredentialsFromReq = ({
   req?: ExpressContext["req"];
   connection?: ExecutionParams | undefined;
 }): authInterface => {
-  // Get cookies
-  let cookies;
+  let authTokenCookie;
   if (connection) {
-    cookies = connection.context;
+    authTokenCookie = connection.context;
   } else if (req) {
-    cookies = req.cookies;
+    authTokenCookie = req.headers.authorization;
   }
 
-  // Get user auth
-  const cookieUserToken = cookies.token;
   let user;
 
-  if (cookieUserToken)
+  if (authTokenCookie)
     try {
-      user = jwt.verify(cookieUserToken, secret) as jwtInterface;
+      user = jwt.verify(authTokenCookie.split("Bearer ")[1], secret) as jwtInterface;
     } catch {
       // throw new AuthenticationError("Invalid token");
     }
 
   // Get ASP auth
-  const cookieAspKey = cookies.token;
+  const cookieAspKey = authTokenCookie.token;
   let asp = undefined;
   if (cookieAspKey)
     try {

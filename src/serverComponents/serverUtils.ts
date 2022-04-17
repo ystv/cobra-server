@@ -42,7 +42,7 @@ export const apolloServerConfig: ApolloServerExpressConfig = {
   context: ({ req, connection }) => getCredentialsFromReq({ req, connection }), //.req.cookies?.token),
   subscriptions: {
     onConnect: (_connectionParams, _webSocket, context) => {
-      return cookieString.parse(context.request.headers.cookie ?? "");
+      return context.request.headers.authorization ?? "";
     },
   },
 };
