@@ -16,7 +16,7 @@ export const getCredentialsFromReq = ({
 }): authInterface => {
   let authTokenCookie: string | undefined;
   if (connection) {
-    authTokenCookie = connection.context;
+    authTokenCookie = connection.context.authToken;
   } else if (req) {
     authTokenCookie = req.headers.authorization;
   }
