@@ -30,18 +30,18 @@ export const getCredentialsFromReq = ({
       // throw new AuthenticationError("Invalid token");
     }
 
-  // Get ASP auth
-  const cookieAspKey = authTokenCookie.token;
-  let asp = undefined;
-  if (cookieAspKey)
-    try {
-      //Check asp ID key
-    } catch {
-      // throw new AuthenticationError("Invalid token");
-    }
+  // // Get ASP auth
+  // const cookieAspKey = authTokenCookie.token;
+  // let asp = undefined;
+  // if (cookieAspKey)
+  //   try {
+  //     //Check asp ID key
+  //   } catch {
+  //     // throw new AuthenticationError("Invalid token");
+  //   }
 
   // Return the authenticated user into the context
-  return { user, asp };
+  return { user };
 };
 
 interface jwtInterface extends jwt.JwtPayload {
