@@ -14,7 +14,7 @@ export const getCredentialsFromReq = ({
   req?: ExpressContext["req"];
   connection?: ExecutionParams | undefined;
 }): authInterface => {
-  let authTokenCookie;
+  let authTokenCookie: string | undefined;
   if (connection) {
     authTokenCookie = connection.context;
   } else if (req) {
@@ -46,7 +46,7 @@ export const getCredentialsFromReq = ({
 
 interface jwtInterface extends jwt.JwtPayload {
   id: number;
-  perms: jwtPermsInterface[];
+  perms: string[];
 }
 
 interface jwtPermsInterface {
@@ -73,7 +73,6 @@ export class directiveHasScope extends SchemaDirectiveVisitor {
 
     field.resolve = async function (...args) {
       const context = args[2] as authInterface;
-      // console.log(context);
 
       // If guests are allowed then resolve immediately
       if (scope.find((value) => value == AuthScopes.Guest))
@@ -93,10 +92,10 @@ function userHasScope(context: authInterface, scope: [AuthScopes]) {
     // If a user token exists, always allow SuperUsers, then check for COBRA permission,
     // then see if standard users are allowed.
 
-    if (context.user.perms.find((e) => e.name === "SuperUser")) return true;
+    if (context.user.perms.find((e) => e === "SuperUser")) return true;
 
     if (
-      context.user.perms.find((e) => e.name === "COBRA") &&
+      context.user.perms.find((e) => e === "COBRA") &&
       scope.find((e) => e === AuthScopes.Admin)
     )
       return true;
