@@ -41,8 +41,10 @@ export const apolloServerConfig: ApolloServerExpressConfig = {
   },
   context: ({ req, connection }) => getCredentialsFromReq({ req, connection }), //.req.cookies?.token),
   subscriptions: {
-    onConnect: (_connectionParams, _webSocket, context) => {
-      return context.request.headers.authorization ?? "";
+    onConnect: (connectionParams, _webSocket, _context) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      return connectionParams.authToken ?? "";
     },
   },
 };
