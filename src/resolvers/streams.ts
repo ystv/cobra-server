@@ -34,7 +34,7 @@ export const RTMPStreamUpdate = (): Promise<RTMPResponse | null> | null =>
           json.applications = json.applications.map((app) =>
             Object.assign(app, {
               streams: app.streams?.sort((a, b) =>
-                a!.name.localeCompare(b!.name)
+                a!.name.localeCompare(b!.name, undefined, { numeric: true })
               ),
             })
           );
