@@ -30,6 +30,14 @@ export const RTMPStreamUpdate = (): Promise<RTMPResponse | null> | null =>
         })
         .then(async (e) => {
           let json: RTMPResponse = await transform(e.data, RTMPTransformObject);
+          // order json streams by name
+          json.applications = json.applications.map((app) =>
+            Object.assign(app, {
+              streams: app.streams?.sort((a, b) =>
+                a!.name.localeCompare(b!.name)
+              ),
+            })
+          );
           return json;
         })
         .catch(() => {

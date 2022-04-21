@@ -87,7 +87,7 @@ type RTMPApplications {
 }
 
 type RTMPStreams {
-    name: String
+    name: String!
     time: Int
     bwIn: Int
     bytesIn: String

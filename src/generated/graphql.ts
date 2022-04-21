@@ -134,7 +134,7 @@ export type RtmpMeta = {
 
 export type RtmpStreams = {
   __typename?: 'RTMPStreams';
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
   time?: Maybe<Scalars['Int']>;
   bwIn?: Maybe<Scalars['Int']>;
   bytesIn?: Maybe<Scalars['String']>;
@@ -370,7 +370,7 @@ export type RtmpMetaResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type RtmpStreamsResolvers<ContextType = any, ParentType extends ResolversParentTypes['RTMPStreams'] = ResolversParentTypes['RTMPStreams']> = {
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   time?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   bwIn?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   bytesIn?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
